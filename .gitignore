@@ -1,0 +1,20 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Build output and packages
+dist/
+*.zip
+*.xpi
+*.crx
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Local secrets (never commit keys or Worker URLs)
+.env
+.env.local

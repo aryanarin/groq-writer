@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Groq Writer settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Groq Writer</h1>
+      <p class="muted">Spelling, grammar, rewriting and translation, powered by Groq or any OpenAI-compatible API you choose.</p>
+      <div class="header-links">
+        <a class="btn-link" id="reportBug" href="mailto:contact@davagni.eu.org?subject=Groq%20Writer%20%E2%80%94%20bug%20report" title="Email a bug report, a question or a feature request">Report a bug</a>
+        <a class="btn-link" href="#shortcuts">Shortcuts</a>
+        <button class="btn-link support" id="openSupport" type="button">&#10084; Support</button>
+      </div>
+    </header>
+
+    <section id="connection">
+      <h2>Connection</h2>
+      <p class="muted small">
+        Groq Writer talks to any service that offers OpenAI-compatible chat completions. Pick Groq for the default,
+        or use another provider, a local model server, a custom endpoint, or a Cloudflare Worker you run yourself.
+        Keys and proxy tokens are stored only in this browser profile and are sent only to the endpoint you choose.
+      </p>
+
+      <div class="field">
+        <label for="provider">Provider</label>
+        <select id="provider"></select>
+        <p class="muted small" id="providerHint"></p>
+      </div>
+
+      <div id="customFields" hidden>
+        <div class="field">
+          <label for="customBaseUrl">Endpoint URL</label>
+          <input id="customBaseUrl" type="text" spellcheck="false" autocomplete="off" placeholder="https://api.example.com/v1">
+          <p class="muted small">
+            Base URL of the API. <code>/chat/completions</code> is added automatically when it is missing.
+            Web addresses must match the provider's documented base URL; a local server works too. For a Worker
+            that takes one fixed URL, choose Cloudflare Worker / proxy above instead.
+          </p>
+        </div>
+        <div class="field">
+          <label for="customAuth">Authentication header</label>
+          <select id="customAuth"></select>
+          <p class="muted small" id="authHint">Choose how the key should be sent.</p>
+        </div>
+      </div>
+
+      <div id="proxyFields" hidden>
+        <div class="field">
+          <label for="proxyUrl">Worker URL</label>
+          <input id="proxyUrl" type="text" spellcheck="false" autocomplete="off" placeholder="https://your-worker.your-subdomain.workers.dev/">
+          <p class="muted small">
+            Requests go to this exact address, so a Worker can check it as-is. No API key is stored in the
+            browser: the Worker adds the real key. It must accept <code>POST</code> requests with CORS headers.
+          </p>
+        </div>
+        <div class="field">
+          <label for="proxyToken">Proxy token <span class="muted small">(optional)</span></label>
+          <div class="row">
+            <input id="proxyToken" type="password" autocomplete="off" spellcheck="false" placeholder="Only if your Worker sets PROXY_TOKEN">
+            <button id="showProxyToken" type="button" aria-pressed="false">Show</button>
+          </div>
+          <p class="muted small">
+            Sent as <code>Authorization: Bearer</code> and stored only in this browser. Leave it empty if
+            your Worker has no token.
+          </p>
+        </div>
+      </div>
+
+      <div class="field" id="keyField">
+        <label for="apiKey" id="apiKeyLabel">API key</label>
+        <div class="row">
+          <input id="apiKey" type="password" autocomplete="off" spellcheck="false">
+          <button id="showKey" type="button" aria-pressed="false">Show</button>
+        </div>
+        <p class="muted small" id="keyHint"></p>
+      </div>
+
+      <div class="row actions">
+        <button id="saveConnection" class="primary" type="button">Save connection</button>
+        <button id="testConnection" type="button">Test connection</button>
+        <button id="grantAccess" type="button" hidden>Allow access</button>
+        <span id="connStatus" class="status" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Models</h2>
+      <p class="muted small">
+        Model names are provider-specific. Use "Load models" after saving to see what your account can use right now.
+        Some servers do not publish a model list; in that case type a name from the provider's documentation.
+      </p>
+      <div class="field">
+        <label for="checkModel">Proofreading model <span class="muted small">(runs as you type, pick a fast one)</span></label>
+        <input id="checkModel" type="text" list="modelList" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="rewriteModel">Rewrite and translate model <span class="muted small">(runs on demand, can be larger)</span></label>
+        <input id="rewriteModel" type="text" list="modelList" spellcheck="false" autocomplete="off">
+      </div>
+      <datalist id="modelList"></datalist>
+      <div class="row actions">
+        <button id="loadModels" type="button">Load models</button>
+        <button id="resetModels" type="button">Reset to provider defaults</button>
+        <span id="modelStatus" class="status" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Writing</h2>
+      <div class="field">
+        <label for="language">Language</label>
+        <select id="language"></select>
+      </div>
+      <fieldset>
+        <legend>What to check</legend>
+        <div id="categories"></div>
+      </fieldset>
+    </section>
+
+    <section>
+      <h2>Translation</h2>
+      <p class="muted small">
+        Select text, then use the orange star or right-click &gt; Groq Writer &gt; Translate to. The source language is
+        detected automatically. Pinned languages are listed first. Any other language is one step away: the star menu
+        has an "Other language..." box that accepts anything you type, and the right-click menu has a "More languages" list.
+      </p>
+      <div class="field">
+        <label for="targetLanguages">Pinned languages <span class="muted small">(one per line, up to 12)</span></label>
+        <textarea id="targetLanguages" rows="4" spellcheck="false"></textarea>
+      </div>
+      <div class="field">
+        <label for="translateTone">Register</label>
+        <select id="translateTone">
+          <option value="formal">Formal (Sie / vous style)</option>
+          <option value="neutral">Match the original</option>
+        </select>
+      </div>
+      <label class="line">
+        <span>Show the star on any selected text, not just in text boxes</span>
+        <span class="switch"><input id="bubbleEverywhere" type="checkbox"><span class="track"></span></span>
+      </label>
+    </section>
+
+    <section id="shortcuts">
+      <h2>Quick actions and shortcuts</h2>
+      <p class="muted small">
+        Two shortcuts apply a change straight to the selected text, without opening the menu. Choose what each one does
+        here. The key combinations themselves belong to the browser: use the button below to change them.
+      </p>
+      <div class="field">
+        <label for="quickTone">Quick rewrite shortcut applies</label>
+        <select id="quickTone"></select>
+      </div>
+      <div class="field">
+        <label for="quickLanguage">Translate shortcut translates into</label>
+        <input id="quickLanguage" type="text" list="languageList" spellcheck="false" autocomplete="off" maxlength="40" placeholder="German">
+        <datalist id="languageList"></datalist>
+      </div>
+      <div id="shortcutList" class="shortcut-list" aria-live="polite"></div>
+      <p class="muted small shortcut-address">
+        Shortcut page: <code id="shortcutUrl">chrome://extensions/shortcuts</code>
+      </p>
+      <div class="row actions">
+        <button id="openShortcuts" type="button">Change key combinations</button>
+        <button id="copyShortcuts" type="button">Copy shortcut page address</button>
+        <span id="shortcutStatus" class="status" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Behavior</h2>
+      <label class="line">
+        <span>Show the status badge in text boxes</span>
+        <span class="switch"><input id="showBadge" type="checkbox"><span class="track"></span></span>
+      </label>
+      <div class="field">
+        <label for="debounce">Wait after typing stops: <strong id="debounceValue"></strong></label>
+        <input id="debounce" type="range" min="400" max="3000" step="100">
+        <p class="muted small">A longer wait uses fewer requests and stays inside provider rate limits.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Personal dictionary</h2>
+      <p class="muted small">Words listed here are never flagged as misspelled. One per line.</p>
+      <textarea id="dictionary" rows="5" spellcheck="false"></textarea>
+    </section>
+
+    <section>
+      <h2>Disabled sites</h2>
+      <p class="muted small">Groq Writer stays off on these domains (and their subdomains). One per line, like <code>example.com</code>.</p>
+      <textarea id="disabledSites" rows="4" spellcheck="false"></textarea>
+    </section>
+
+    <section>
+      <h2>Privacy</h2>
+      <p class="muted small">
+        Text in a box that Groq Writer is watching is sent to your chosen provider (Groq by default) or to the
+        Worker or proxy you configure, so it can be checked. Password fields, email fields, code editors, and fields
+        with spellcheck turned off are skipped. Nothing is sent to the developer or anyone else. Your key, proxy URL
+        and token, settings and dictionary stay in this browser; only settings sync through your browser account, and
+        keys and proxy details never do. Turn the extension off on any site from the toolbar popup. Full policy:
+        <a href="privacy.html" target="_blank" rel="noopener noreferrer">privacy policy</a>.
+      </p>
+    </section>
+
+    <dialog id="supportDialog" class="support-dialog" aria-labelledby="supportTitle">
+      <div class="support-head">
+        <div>
+          <h2 id="supportTitle">&#10084; Support Groq Writer</h2>
+          <p class="muted small">Built and maintained solo, in spare time. If it saves you time, a coffee is always appreciated.</p>
+        </div>
+        <button id="closeSupport" type="button" aria-label="Close">&#10005;</button>
+      </div>
+      <div class="support-cols">
+        <div class="support-col">
+          <h3>&#9749; International</h3>
+          <p class="muted small">One-off or monthly, via card / PayPal / Apple &amp; Google Pay on Ko-fi.</p>
+          <a class="primary-link" href="https://ko-fi.com/ysaryan" target="_blank" rel="noopener noreferrer">Support on Ko-fi &#8599;</a>
+        </div>
+        <div class="support-col">
+          <h3>India: UPI</h3>
+          <p class="muted small">Scan the QR with any UPI app, or copy the ID.</p>
+          <div class="qr-card"><img src="icons/upi-qr.png" alt="UPI QR code for Aryan Raj" width="150" height="150"></div>
+          <div class="upi-row">
+            <code id="upiId">ysaryanraj@okaxis</code>
+            <button id="copyUpi" type="button">Copy</button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <div id="saved" class="toast" role="status" aria-live="polite">Saved</div>
+  </main>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>

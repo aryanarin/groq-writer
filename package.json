@@ -1,0 +1,21 @@
+{
+  "name": "groq-writer",
+  "version": "1.1.1",
+  "description": "A Grammarly-style writing assistant for Chrome and Firefox, powered by Groq or any OpenAI-compatible API.",
+  "private": true,
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/aryanarin/groq-writer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aryanarin/groq-writer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aryanarin/groq-writer/issues"
+  },
+  "scripts": {
+    "sync": "powershell -ExecutionPolicy Bypass -File tools/sync-firefox.ps1",
+    "check": "node tools/check-wiring.js",
+    "package": "powershell -ExecutionPolicy Bypass -File tools/package.ps1",
+    "lint:firefox": "npx web-ext lint --source-dir firefox --self-hosted"
+  }
+}
