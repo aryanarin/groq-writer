@@ -1,13 +1,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Generates docs\store-assets\promo-440x280.png for the Chrome Web Store.
-# Run tools\make-icons.ps1 first so chrome\icons\icon128.png exists.
 # Run from the project root:  powershell -ExecutionPolicy Bypass -File tools\make-promo.ps1
 Add-Type -AssemblyName System.Drawing
+. (Join-Path $PSScriptRoot 'icon-art.ps1')
 
 $root = Split-Path -Parent $PSScriptRoot
 $out = Join-Path $root 'docs\store-assets\promo-440x280.png'
-$iconPath = Join-Path $root 'chrome\icons\icon128.png'
-if (-not (Test-Path $iconPath)) { throw "Run tools\make-icons.ps1 first: $iconPath is missing." }
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $out) | Out-Null
 
 $w = 440
@@ -24,16 +22,23 @@ $bg = New-Object System.Drawing.Drawing2D.LinearGradientBrush $bgRect,
   ([System.Drawing.Color]::FromArgb(255, 24, 39, 64)), 35
 $g.FillRectangle($bg, $bgRect)
 
-# Soft brand glows.
-$glowBlue = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(58, 37, 99, 235))
-$glowTeal = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(40, 13, 148, 136))
-$g.FillEllipse($glowBlue, 250, -120, 300, 300)
-$g.FillEllipse($glowTeal, -100, 170, 260, 260)
+# Soft brand glows with a radial falloff.
+$glowBluePath = New-Object System.Drawing.Drawing2D.GraphicsPath
+$glowBluePath.AddEllipse(250, -120, 300, 300)
+$glowBlue = New-Object System.Drawing.Drawing2D.PathGradientBrush($glowBluePath)
+$glowBlue.CenterColor = [System.Drawing.Color]::FromArgb(68, 37, 99, 235)
+$glowBlue.SurroundColors = [System.Drawing.Color[]]@([System.Drawing.Color]::FromArgb(0, 37, 99, 235))
+$g.FillPath($glowBlue, $glowBluePath)
+
+$glowTealPath = New-Object System.Drawing.Drawing2D.GraphicsPath
+$glowTealPath.AddEllipse(-100, 170, 260, 260)
+$glowTeal = New-Object System.Drawing.Drawing2D.PathGradientBrush($glowTealPath)
+$glowTeal.CenterColor = [System.Drawing.Color]::FromArgb(46, 13, 148, 136)
+$glowTeal.SurroundColors = [System.Drawing.Color[]]@([System.Drawing.Color]::FromArgb(0, 13, 148, 136))
+$g.FillPath($glowTeal, $glowTealPath)
 
 # Icon and wordmark.
-$icon = [System.Drawing.Image]::FromFile($iconPath)
-$g.DrawImage($icon, 30, 30, 62, 62)
-$icon.Dispose()
+Add-AppArtwork $g 30 30 62 $true
 
 $nameFont = New-Object System.Drawing.Font 'Segoe UI', 30, ([System.Drawing.FontStyle]::Bold), ([System.Drawing.GraphicsUnit]::Pixel)
 $nameBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(255, 244, 248, 255))
@@ -88,7 +93,7 @@ $g.FillRectangle($rule, $ruleRect)
 
 $bmp.Save($out, [System.Drawing.Imaging.ImageFormat]::Png)
 $g.Dispose(); $bmp.Dispose()
-$bg.Dispose(); $glowBlue.Dispose(); $glowTeal.Dispose()
+$bg.Dispose(); $glowBlue.Dispose(); $glowBluePath.Dispose(); $glowTeal.Dispose(); $glowTealPath.Dispose()
 $nameFont.Dispose(); $nameBrush.Dispose(); $subFont.Dispose(); $subBrush.Dispose()
 $headlineFont.Dispose(); $bodyFont.Dispose(); $bodyBrush.Dispose()
 $chipFont.Dispose(); $chipTextBrush.Dispose(); $chipFill.Dispose(); $chipPen.Dispose()
