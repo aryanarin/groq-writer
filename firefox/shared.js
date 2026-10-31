@@ -9,7 +9,7 @@
 export const api = globalThis.browser ?? globalThis.chrome;
 
 export const GROQ_BASE_URL = 'https://api.groq.com/openai/v1';
-export const GITHUB_URL = 'https://github.com/aryanarin/groq-writer';
+export const GITHUB_URL = 'https://github.com/aryanarin/fluenttext';
 export const ISSUES_URL = GITHUB_URL + '/issues';
 
 // Paste-ready providers. Only the endpoint and suggested models change; every one
@@ -417,12 +417,12 @@ export function bugReportMailto(version, userAgent) {
     'Steps to reproduce\n' +
     '1. \n2. \n3. \n\n' +
     '--- details below help a great deal, please leave them in ---\n' +
-    'Groq Writer: ' + v + '\n' +
+    'FluentText: ' + v + '\n' +
     'Browser: ' + (userAgent || 'unknown') + '\n' +
     'Where it happened (website, text box, or rich editor): \n' +
     'Connection (Groq, a proxy, or a custom endpoint): \n';
   return 'mailto:' + CONTACT_EMAIL +
-    '?subject=' + encodeURIComponent('Groq Writer \u2014 bug report (v' + v + ')') +
+    '?subject=' + encodeURIComponent('FluentText \u2014 bug report (v' + v + ')') +
     '&body=' + encodeURIComponent(body);
 }
 

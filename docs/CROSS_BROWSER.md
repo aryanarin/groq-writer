@@ -42,7 +42,7 @@ The required host permission is only `https://api.groq.com/*`. When the user cho
 
 - **Underlines in rich text** use the CSS Custom Highlight API (Chrome 105+, Firefox 140+). Where it is unavailable the badge list and tooltips still work; only the in-place underline is missing.
 - **Content-script styles:** the UI first tries a constructable stylesheet (not blocked by page CSP), and falls back to a `<style>` element if the browser refuses a sheet created in the content-script world.
-- **Host permissions:** Firefox treats MV3 host permissions as user-controlled. If the extension is silent on a site, allow access to all websites under `about:addons` > Groq Writer > Permissions.
+- **Host permissions:** Firefox treats MV3 host permissions as user-controlled. If the extension is silent on a site, allow access to all websites under `about:addons` > FluentText > Permissions.
 - **Context menus:** Chrome before 123 does not return a promise from `contextMenus.removeAll()`, so `background.js` uses a callback/promise helper and serializes menu rebuilds.
 - **Keyboard shortcuts:** browsers own the key bindings. The extension can read them with `commands.getAll()` and can open the browser's manager (`commands.openShortcutSettings()` in Firefox, `chrome://extensions/shortcuts` in Chromium), but it cannot assign keys itself. Chrome allows at most four commands with `suggested_key`; the manifest uses exactly four.
 - **mailto: links** (Report a bug) open the system's default mail handler in both browsers.

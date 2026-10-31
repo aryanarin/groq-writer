@@ -12,8 +12,8 @@ const { spawn, execFileSync } = require('child_process');
 
 const REPO = path.resolve(__dirname, '..');
 const EXT = path.join(REPO, 'chrome');
-const OUT = path.join(os.tmpdir(), 'groq-writer-e2e');
-const PAGE_TITLE = 'Groq Writer E2E';
+const OUT = path.join(os.tmpdir(), 'fluenttext-e2e');
+const PAGE_TITLE = 'FluentText E2E';
 const results = [];
 const pageErrors = [];
 let mockMode = 'normal';
@@ -265,7 +265,7 @@ function testPage() {
 </style></head>
 <body><main>
   <h1>Write better, everywhere</h1>
-  <p class="lede">Groq Writer checks spelling, grammar and clarity as you type. Select text for rewriting and translation.</p>
+  <p class="lede">FluentText checks spelling, grammar and clarity as you type. Select text for rewriting and translation.</p>
   <div class="panel">
     <h2>Draft</h2>
     <textarea id="editor" spellcheck="true" placeholder="Start typing..."></textarea>
@@ -427,7 +427,7 @@ async function findWorker(port) {
         await cdp.open();
         await cdp.send('Runtime.enable');
         const name = await evaluate(cdp, 'chrome.runtime.getManifest().name');
-        if (name === 'Groq Writer') return { cdp, extId: t.url.split('/')[2] };
+        if (name === 'FluentText') return { cdp, extId: t.url.split('/')[2] };
         cdp.close();
       } catch {
         cdp.close();
@@ -435,11 +435,11 @@ async function findWorker(port) {
     }
     await sleep(250);
   }
-  throw new Error('Groq Writer service worker not found');
+  throw new Error('FluentText service worker not found');
 }
 
 function shadowExpr(body) {
-  return `(() => { const h = document.querySelector('[data-groq-writer]'); const s = h && h.shadowRoot; if (!s) return null; ${body} })()`;
+  return `(() => { const h = document.querySelector('[data-fluenttext]'); const s = h && h.shadowRoot; if (!s) return null; ${body} })()`;
 }
 
 function badgeExpr() {
@@ -470,7 +470,7 @@ async function selectInTextarea(page, start, end) {
 
 async function clickShadow(page, selector, text) {
   return evaluate(page, `(() => {
-    const h = document.querySelector('[data-groq-writer]');
+    const h = document.querySelector('[data-fluenttext]');
     const s = h && h.shadowRoot;
     if (!s) return false;
     let el = s.querySelector(${JSON.stringify(selector)});
@@ -508,7 +508,7 @@ async function clickMenuOption(page, label) {
 
 async function clickCardButton(page, label) {
   return evaluate(page, `(() => {
-    const c = document.querySelector('[data-groq-writer]').shadowRoot.querySelectorAll('.card')[3];
+    const c = document.querySelector('[data-fluenttext]').shadowRoot.querySelectorAll('.card')[3];
     const b = [...c.querySelectorAll('button')].find((n) => n.textContent.trim() === ${JSON.stringify(label)});
     if (!b) return false;
     b.click();
@@ -525,7 +525,7 @@ async function run() {
 
   const server = await startServer();
   console.log('Test server:', `http://127.0.0.1:${server.port}`);
-  const profile = path.join(os.tmpdir(), 'groq-writer-e2e-profile');
+  const profile = path.join(os.tmpdir(), 'fluenttext-e2e-profile');
   fs.rmSync(profile, { recursive: true, force: true });
   fs.mkdirSync(profile, { recursive: true });
 
@@ -716,7 +716,7 @@ async function run() {
     const quick = await waitFor(page, `document.getElementById('editor').value === 'Hey there! Please send me the report.' ? document.getElementById('editor').value : false`, 'quick rewrite applied', { timeout: 15000 });
     ok('quick action rewrites the selection directly', !!quick, String(quick));
     const toast = await waitFor(page, `(() => {
-      const h = document.querySelector('[data-groq-writer]');
+      const h = document.querySelector('[data-fluenttext]');
       const t = h && h.shadowRoot && h.shadowRoot.querySelector('.toast-msg');
       return t ? t.textContent : false;
     })()`, 'quick action toast', { timeout: 5000 });
@@ -760,7 +760,7 @@ async function run() {
     support.close();
 
     // ---------------------------------------------------------- options page
-    const options = await openTarget(browser, dev.port, `chrome-extension://${worker.extId}/options.html`, { width: 1000, height: 1000 });
+    const options = await openTarget(browser, dev.port, `chrome-extension://${worker.extId}/options.html`, { width: 1280, height: 800 });
     const opt = options.cdp;
     await waitFor(opt, `document.querySelectorAll('#provider option').length >= 2`, 'provider options');
     await waitFor(opt, `/Alt\\s*\\+\\s*Shift/.test(document.getElementById('shortcutList').innerText)`, 'shortcut list', { timeout: 8000 });
@@ -782,7 +782,7 @@ async function run() {
     ok('quick action settings are rendered', providerState.tone === 'friendly' && providerState.language === 'German', providerState.tone + '/' + providerState.language);
     ok('shortcut page address is shown', providerState.shortcutUrl === 'chrome://extensions/shortcuts', providerState.shortcutUrl);
     ok('all four shortcuts are listed', /Alt\s*\+\s*Shift\s*\+\s*E/.test(providerState.shortcuts) && /Alt\s*\+\s*Shift\s*\+\s*F/.test(providerState.shortcuts) && /Alt\s*\+\s*Shift\s*\+\s*G/.test(providerState.shortcuts) && /Alt\s*\+\s*Shift\s*\+\s*K/.test(providerState.shortcuts), providerState.shortcuts);
-    await screenshot(opt, '09-options', 1000, 1000);
+    await screenshot(opt, '09-options');
 
     await evaluate(opt, `document.getElementById('testConnection').click(); true`, { userGesture: true });
     const connected = await waitFor(opt, `document.getElementById('connStatus').textContent.includes('Connected') ? document.getElementById('connStatus').textContent : false`, 'connection test', { timeout: 15000 });
@@ -796,7 +796,7 @@ async function run() {
     await evaluate(opt, `document.getElementById('openSupport').click(); true`, { userGesture: true });
     await waitFor(opt, `document.getElementById('supportDialog').open`, 'options support dialog', { timeout: 5000 });
     ok('options header Support opens the dialog', true);
-    await screenshot(opt, '12-options-support', 1000, 1000);
+    await screenshot(opt, '12-options-support');
     await evaluate(opt, `document.getElementById('closeSupport').click(); true`, { userGesture: true });
     await waitFor(opt, `!document.getElementById('supportDialog').open`, 'support dialog closed', { timeout: 5000 });
 
@@ -862,7 +862,7 @@ async function run() {
       auth.dispatchEvent(new Event('change', { bubbles: true }));
       return true;
     })()`, { userGesture: true });
-    await screenshot(opt, '11-options-custom', 1000, 1000);
+    await screenshot(opt, '11-options-custom');
 
     // This may show a native permission bubble that headless cannot dismiss; the
     // UI should still expose the manual Allow access route.
@@ -881,7 +881,7 @@ async function run() {
     }
 
     // A copy with the local origin in host_permissions proves the whole custom path.
-    const customCopy = path.join(os.tmpdir(), 'groq-writer-e2e-custom-extension');
+    const customCopy = path.join(os.tmpdir(), 'fluenttext-e2e-custom-extension');
     fs.rmSync(customCopy, { recursive: true, force: true });
     fs.cpSync(EXT, customCopy, { recursive: true });
     const manifestFile = path.join(customCopy, 'manifest.json');
@@ -933,7 +933,7 @@ async function waitSupportDialog(cdp) {
 // Runs a second browser instance with a copy that has the local endpoint in
 // host_permissions. This proves the non-Groq network path without a prompt.
 async function runCustomPhase(chrome, extDir, server) {
-  const profile = path.join(os.tmpdir(), 'groq-writer-e2e-custom-profile');
+  const profile = path.join(os.tmpdir(), 'fluenttext-e2e-custom-profile');
   fs.rmSync(profile, { recursive: true, force: true });
   fs.mkdirSync(profile, { recursive: true });
   const log = fs.openSync(path.join(OUT, 'chromium-custom.log'), 'w');
@@ -996,7 +996,7 @@ async function runCustomPhase(chrome, extDir, server) {
     const sent = server.requests.filter((r) => r.url === '/v1/chat/completions');
     ok('custom provider sends no auth header with auth=none', sent.length > 0 && sent.every((r) => !r.auth), JSON.stringify(sent.map((r) => r.auth)));
 
-    const options = await openTarget(browser, dev.port, `chrome-extension://${worker.extId}/options.html`, { width: 1000, height: 1000 });
+    const options = await openTarget(browser, dev.port, `chrome-extension://${worker.extId}/options.html`, { width: 1280, height: 800 });
     const opt = options.cdp;
     await waitFor(opt, `document.getElementById('connStatus') !== null`, 'custom options');
     const view = await evaluate(opt, `(() => ({
@@ -1011,7 +1011,7 @@ async function runCustomPhase(chrome, extDir, server) {
     const connected = await waitFor(opt, `document.getElementById('connStatus').textContent.includes('Connected') ? document.getElementById('connStatus').textContent : false`, 'custom connection test', { timeout: 15000 });
     const models = await evaluate(opt, `[...document.querySelectorAll('#modelList option')].map((o) => o.value)`);
     ok('custom connection test lists chat models', connected.includes('1 model available') && models.includes('local-chat') && !models.includes('local-embed'), connected + ' / ' + models.join(','));
-    await screenshot(opt, '14-options-custom-connected', 1000, 1000);
+    await screenshot(opt, '14-options-custom-connected');
 
     // ---------------------------------------------------------- dedicated Worker proxy
     await evaluate(opt, `(() => {

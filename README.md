@@ -1,6 +1,6 @@
-# Groq Writer
+# FluentText
 
-A Grammarly-style writing assistant for Chrome and Firefox, powered by [Groq](https://groq.com) or any OpenAI-compatible API. It proofreads as you type, rewrites and translates selected text, and detects languages, all without leaving the page.
+A writing assistant for Chrome and Firefox, powered by [Groq](https://groq.com) or any OpenAI-compatible API. It proofreads as you type, rewrites and translates selected text, and detects languages, all without leaving the page.
 
 - **Proofreading:** spelling, grammar, punctuation, clarity and style, underlined in place. Click an underline to accept, dismiss, or add a word to your dictionary. A badge in the text box lists everything and offers "Fix all".
 - **Rewrite:** improve, fix, shorten, lengthen, paraphrase, formal, friendly, confident, or your own instruction.
@@ -26,7 +26,7 @@ Licensed under the [GNU General Public License v3.0](LICENSE).
 1. Open `about:debugging#/runtime/this-firefox`.
 2. Click **Load Temporary Add-on...** and choose `firefox/manifest.json`.
 
-Temporary add-ons are removed when Firefox restarts. For a permanent install, submit the Firefox build to [addons.mozilla.org](https://addons.mozilla.org) for signing (see [docs/STORE_NOTES.md](docs/STORE_NOTES.md)). If the extension shows no suggestions in Firefox, open `about:addons`, select Groq Writer, then **Permissions**, and allow access to all websites.
+Temporary add-ons are removed when Firefox restarts. For a permanent install, submit the Firefox build to [addons.mozilla.org](https://addons.mozilla.org) for signing (see [docs/STORE_NOTES.md](docs/STORE_NOTES.md)). If the extension shows no suggestions in Firefox, open `about:addons`, select FluentText, then **Permissions**, and allow access to all websites.
 
 ## Connect it to a provider
 
@@ -56,7 +56,7 @@ Use this if you do not want a key inside the browser, if the provider is awkward
 
 1. Deploy [`docs/cloudflare-worker.example.js`](docs/cloudflare-worker.example.js) as a Worker.
 2. Set the Worker's variables: `API_KEY` (as a secret), `API_ENDPOINT` (`https://api.groq.com/openai/v1/chat/completions`), optionally `API_MODEL`, and optionally `PROXY_TOKEN` for authentication.
-3. In Groq Writer choose **Cloudflare Worker / proxy** under **Connection**.
+3. In FluentText choose **Cloudflare Worker / proxy** under **Connection**.
 4. Enter the Worker's URL. It is used exactly as entered, with no path added, so paste the address your Worker listens on. When you save or test, the browser asks for permission to contact that host.
 5. If the Worker sets `PROXY_TOKEN`, paste the same value into **Proxy token**. Otherwise leave it empty.
 6. Click **Test connection**, then **Save connection**. The test sends one short chat request; a Worker has no model list to load.
@@ -73,7 +73,7 @@ The Groq defaults are `openai/gpt-oss-20b` for as-you-type checks and `openai/gp
 | ------ | --- |
 | Proofread | Type in any text box. After a short pause, problems are underlined. Click one for the fix. |
 | Fix everything | Click the round badge in the text box, then **Fix all**. |
-| Rewrite, translate or detect language | Select text, then click the orange star, or right-click and choose **Groq Writer**. |
+| Rewrite, translate or detect language | Select text, then click the star, or right-click and choose **FluentText**. |
 | Translate to another language | Star menu: type it in **Other language...**. Right-click menu: **Translate to > More languages**. |
 | Quick rewrite | Select text and press **Alt+Shift+F** (default). Applies the mode chosen in settings, formal by default. |
 | Quick translate | Select text and press **Alt+Shift+G** (default). Translates into the language chosen in settings, German by default. |
@@ -93,7 +93,7 @@ The key combinations themselves belong to the browser, not to the extension: bro
 
 The settings page always shows the keys currently bound. If a shortcut shows "Not set", the browser has no key assigned for it.
 
-The orange star appears in text boxes by default. Turn on **Show the star on any selected text** in settings to get it everywhere, or use the right-click menu on read-only text.
+The star appears in text boxes by default. Turn on **Show the star on any selected text** in settings to get it everywhere, or use the right-click menu on read-only text.
 
 Colors: red is spelling, grammar and punctuation; blue is clarity; purple is style.
 
@@ -109,7 +109,7 @@ Google Docs (canvas editor), code editors (Monaco, CodeMirror, Ace), password an
 
 ## Privacy
 
-- Text in a field that Groq Writer is watching is sent to the provider you configured so it can be checked. Nothing is sent anywhere else.
+- Text in a field that FluentText is watching is sent to the provider you configured so it can be checked. Nothing is sent anywhere else.
 - Your API key, proxy URL and token, and settings stay in the browser. Keys and proxy details never sync; other settings may sync through your browser account. Dictionary and disabled sites stay local.
 - Host access to a custom endpoint or Worker is optional and requested only when you add that endpoint. It can be revoked at any time in the browser's extension settings.
 - There is no analytics, tracking or account, and the developer operates no server that receives your data.
@@ -131,7 +131,7 @@ Page ──> content.js ──message──> background ──fetch──> provi
 ## Project layout
 
 ```
-groq-writer/
+fluenttext/
 ├── chrome/            Chrome / Edge / Brave build (load this folder)
 ├── firefox/           Firefox build: same files, different manifest.json
 ├── docs/              Privacy policy, store notes, cross-browser notes, example Worker
@@ -170,14 +170,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/CROSS_BROWSER.md](docs/CROSS_BR
 
 ## Support
 
-Groq Writer is built and maintained in spare time.
+FluentText is built and maintained in spare time.
 
-- **Report a bug or request a feature:** use the **Report a bug** link in the popup or settings page (it prefills your version and browser), or [open an issue](https://github.com/aryanarin/groq-writer/issues).
+- **Report a bug or request a feature:** use the **Report a bug** link in the popup or settings page (it prefills your version and browser), or [open an issue](https://github.com/aryanarin/fluenttext/issues).
 - **Support the project:** [ko-fi.com/ysaryan](https://ko-fi.com/ysaryan), or UPI `ysaryanraj@okaxis` (QR code in the extension's Support dialog). Starring the repository also helps.
 - Support links are also available from the badge panel, the star menu, result cards, and the right-click menu.
 
 ## License
 
-Copyright (C) 2026 Aryan Raj. Groq Writer is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. It comes with no warranty. See [LICENSE](LICENSE).
+Copyright (C) 2026 Aryan Raj. FluentText is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. It comes with no warranty. See [LICENSE](LICENSE).
 
-Groq is a trademark of Groq, Inc. This project is independent and not affiliated with or endorsed by Groq. Other provider names are trademarks of their respective owners.
+FluentText is an independent project. Groq is a trademark of Groq, Inc., and is used here only to name the compatible API provider; this project is not affiliated with or endorsed by Groq. Other provider names are trademarks of their respective owners.

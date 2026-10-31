@@ -1,16 +1,16 @@
 {
-  "name": "groq-writer",
-  "version": "1.1.1",
-  "description": "A Grammarly-style writing assistant for Chrome and Firefox, powered by Groq or any OpenAI-compatible API.",
+  "name": "fluenttext",
+  "version": "1.2.0",
+  "description": "A writing assistant for Chrome and Firefox, powered by Groq or any OpenAI-compatible API.",
   "private": true,
   "license": "GPL-3.0-or-later",
-  "homepage": "https://github.com/aryanarin/groq-writer",
+  "homepage": "https://github.com/aryanarin/fluenttext",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aryanarin/groq-writer.git"
+    "url": "git+https://github.com/aryanarin/fluenttext.git"
   },
   "bugs": {
-    "url": "https://github.com/aryanarin/groq-writer/issues"
+    "url": "https://github.com/aryanarin/fluenttext/issues"
   },
   "scripts": {
     "sync": "powershell -ExecutionPolicy Bypass -File tools/sync-firefox.ps1",

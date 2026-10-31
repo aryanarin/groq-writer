@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Groq Writer background service worker / event page.
+// FluentText background service worker / event page.
 // Owns the API keys and every network call. Content scripts only send text here.
 
 import {
@@ -659,7 +659,7 @@ function removeAllMenus() {
   });
 }
 
-// Right-click menu: Groq Writer > Rewrite > [modes], Translate to > [languages],
+// Right-click menu: FluentText > Rewrite > [modes], Translate to > [languages],
 // Detect language, Settings, Support. Replacing text only happens in editable fields.
 async function buildMenus() {
   const s = await getSettings();
@@ -671,7 +671,7 @@ async function buildMenus() {
       if (result && typeof result.then === 'function') result.catch(() => {});
     } catch { /* duplicate id or unavailable menu */ }
   };
-  add({ id: 'gw-root', title: 'Groq Writer' });
+  add({ id: 'gw-root', title: 'FluentText' });
   add({ id: 'gw-rewrite', parentId: 'gw-root', title: 'Rewrite' });
   for (const m of REWRITE_MODES) {
     add({ id: `gw-mode-${m.id}`, parentId: 'gw-rewrite', title: m.label });
@@ -689,7 +689,7 @@ async function buildMenus() {
   }
   add({ id: 'gw-detect', parentId: 'gw-root', title: 'Detect language' });
   add({ id: 'gw-settings', parentId: 'gw-root', title: 'Settings\u2026' });
-  add({ id: 'gw-support', parentId: 'gw-root', title: 'Support Groq Writer\u2026' });
+  add({ id: 'gw-support', parentId: 'gw-root', title: 'Support FluentText\u2026' });
 }
 
 // Pre-1.1 installs stored a keyless Worker URL. Keep the URL and give it back its

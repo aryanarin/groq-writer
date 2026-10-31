@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Groq Writer content script.
+// FluentText content script.
 // Watches editable fields, asks the background worker to proofread them,
 // draws underlines, and offers fixes plus a rewrite menu for selected text.
 (() => {
@@ -37,7 +37,7 @@
     bad_request: 'The provider rejected the request. Check the model name and endpoint in settings.',
     no_model: 'Choose a model in settings first.',
     bad_language: 'That does not look like a language name. Try something like "Spanish".',
-    reload: 'Groq Writer was updated. Reload this page to continue.',
+    reload: 'FluentText was updated. Reload this page to continue.',
     empty: 'Nothing to do.',
     unknown: 'Something went wrong.'
   };
@@ -534,8 +534,8 @@
     button { font: inherit; font-size: 12px; border-radius: 6px; padding: 5px 10px; cursor: pointer;
              border: 1px solid #d0d5dd; background: #fff; color: #1f2430; }
     button:hover { background: #f4f5f7; }
-    button.primary { background: #f55036; border-color: #f55036; color: #fff; font-weight: 600; }
-    button.primary:hover { background: #dc4229; }
+    button.primary { background: #2563eb; border-color: #2563eb; color: #fff; font-weight: 600; }
+    button.primary:hover { background: #1d4ed8; }
     button.link { border: none; background: none; color: #5b6475; padding: 5px 4px; }
     .list { max-height: 220px; overflow: auto; margin: 6px 0 10px; }
     .card.wide { width: 380px; }
@@ -550,7 +550,7 @@
     .foot { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-top: 8px;
             padding-top: 6px; border-top: 1px solid #eef0f4; }
     .foot .link { color: #b42318; }
-    .bubble { width: 28px; height: 28px; border-radius: 8px; background: #f55036; color: #fff; display: flex; align-items: center;
+    .bubble { width: 28px; height: 28px; border-radius: 8px; background: #2563eb; color: #fff; display: flex; align-items: center;
               justify-content: center; font-size: 15px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.3); user-select: none; }
     .menu { width: 230px; padding: 6px; max-height: min(480px, calc(100vh - 16px)); overflow: auto; }
     .menu .sec { padding: 6px 8px 2px; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: #6b7280; }
@@ -559,7 +559,7 @@
     .menu input { width: 100%; margin: 4px 0; padding: 6px 8px; font-size: 13px; border: 1px solid #d0d5dd; border-radius: 6px; color: #1f2430; background: #fff; }
     .result { white-space: pre-wrap; max-height: 220px; overflow: auto; background: #f8fafc; border: 1px solid #e5e7eb;
               border-radius: 6px; padding: 8px; margin-bottom: 10px; word-break: break-word; }
-    .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid #d0d5dd; border-top-color: #f55036;
+    .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid #d0d5dd; border-top-color: #2563eb;
             border-radius: 50%; animation: spin .8s linear infinite; vertical-align: -2px; margin-right: 6px; }
     .err-text { color: #b42318; margin-bottom: 10px; }
     .toast-msg { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1f2430;
@@ -610,7 +610,7 @@
   function ensureUI() {
     if (host) return;
     host = document.createElement('div');
-    host.setAttribute('data-groq-writer', '');
+    host.setAttribute('data-fluenttext', '');
     host.style.cssText = 'all: initial; position: fixed; left: 0; top: 0; width: 0; height: 0; z-index: 2147483647;';
     shadow = host.attachShadow({ mode: 'open' });
     // Constructable stylesheets are not blocked by page CSP, unlike injected <style> tags.
@@ -627,7 +627,7 @@
     badge = h('div', { class: 'ui badge hidden', onclick: onBadgeClick });
     panel = h('div', { class: 'ui card wide hidden' });
     tip = h('div', { class: 'ui card hidden' });
-    bubble = h('div', { class: 'ui bubble hidden', title: 'Rewrite with Groq Writer', onclick: openMenu }, '\u2726');
+    bubble = h('div', { class: 'ui bubble hidden', title: 'Rewrite with FluentText', onclick: openMenu }, '\u2726');
     menu = h('div', { class: 'ui card menu hidden' });
     card = h('div', { class: 'ui card hidden' });
     shadow.append(layer, badge, panel, tip, bubble, menu, card);
@@ -867,7 +867,7 @@
       return { cls: 'issues', text: n > 99 ? '99+' : String(n), title: `${n} suggestion${n === 1 ? '' : 's'}` };
     }
     if (st.status === 'ok' || st.status === 'partial') return { cls: 'ok', text: '\u2713', title: 'No issues found' };
-    return { cls: '', text: 'G', title: 'Groq Writer' };
+    return { cls: '', text: 'F', title: 'FluentText' };
   }
 
   function updateBadge() {
@@ -927,7 +927,7 @@
     const st = active;
     const info = badgeInfo(st);
     panel.replaceChildren();
-    panel.append(h('h4', null, 'Groq Writer'));
+    panel.append(h('h4', null, 'FluentText'));
 
     if (!configured || st.status === 'error') {
       panel.append(

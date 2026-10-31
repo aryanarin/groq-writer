@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
-// Example Cloudflare Worker for Groq Writer.
+// Example Cloudflare Worker for FluentText.
 //
 // It receives the extension's chat-completion requests, adds your API key, and forwards
 // them to Groq. The key lives only in Cloudflare, never in the browser.
@@ -9,17 +9,17 @@
 //   API_KEY       Your Groq API key (store as a Secret)
 //   API_ENDPOINT  https://api.groq.com/openai/v1/chat/completions
 //   API_MODEL     Optional fallback model, used only when a request names none.
-//                 Groq Writer always names a model, so this matters for other clients.
+//                 FluentText always names a model, so this matters for other clients.
 //   PROXY_TOKEN   Optional. When set, requests must send "Authorization: Bearer <token>".
 //                 Use a long random value and paste the same value into the Proxy token
-//                 field in Groq Writer (Provider: Cloudflare Worker / proxy).
+//                 field in FluentText (Provider: Cloudflare Worker / proxy).
 //
 // SECURITY: without PROXY_TOKEN this Worker has no authentication. Anyone who learns its
 // URL can spend your key. Keep the URL private, set a spend limit with your provider, and
 // set PROXY_TOKEN before sharing or publishing the URL.
 //
 // Deploy: Workers & Pages > Create Worker > Edit code > paste this file > Deploy.
-// Or:     wrangler deploy docs/cloudflare-worker.example.js --name groq-writer-proxy
+// Or:     wrangler deploy docs/cloudflare-worker.example.js --name fluenttext-proxy
 
 export default {
   async fetch(request, env) {

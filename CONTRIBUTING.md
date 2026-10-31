@@ -1,4 +1,4 @@
-# Contributing to Groq Writer
+# Contributing to FluentText
 
 Thanks for helping. Bug reports, ideas and pull requests are all welcome.
 

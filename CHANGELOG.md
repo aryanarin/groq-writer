@@ -2,6 +2,16 @@
 
 All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - 2026-10-31
+
+### Changed
+- Renamed the extension to **FluentText**. Groq remains available as the default provider, but the product no longer uses Groq's registered name as its own.
+- New blue-to-teal icon set with a white F and a flowing underline, plus a matching padded store icon and promo tile.
+- The settings page now uses a dark brand bar, a grouped sticky sidebar, and a compact two-column card layout instead of one long scrolling column. Navigation highlights the current section, and the layout collapses to a horizontal nav on narrow windows.
+- The in-page star, badge, tooltip, settings panel, popup, context menu, bug report subject, privacy policy and documentation now use the FluentText name and the new blue accent.
+- Placeholder branding in the status badge changed from G to F.
+- The Firefox add-on ID is now `fluenttext@ysaryan.eu.org`, and the project repository moved to `github.com/aryanarin/fluenttext`.
+
 ## [1.1.1] - 2026-10-25
 
 ### Added

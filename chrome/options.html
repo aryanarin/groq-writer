@@ -2,218 +2,388 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Groq Writer settings</title>
+  <title>FluentText settings</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="ui.css">
   <link rel="stylesheet" href="options.css">
 </head>
 <body>
-  <main>
-    <header>
-      <h1>Groq Writer</h1>
-      <p class="muted">Spelling, grammar, rewriting and translation, powered by Groq or any OpenAI-compatible API you choose.</p>
-      <div class="header-links">
-        <a class="btn-link" id="reportBug" href="mailto:contact@davagni.eu.org?subject=Groq%20Writer%20%E2%80%94%20bug%20report" title="Email a bug report, a question or a feature request">Report a bug</a>
-        <a class="btn-link" href="#shortcuts">Shortcuts</a>
-        <button class="btn-link support" id="openSupport" type="button">&#10084; Support</button>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#connection" aria-label="FluentText settings">
+        <img class="brand-mark" src="icons/icon48.png" width="38" height="38" alt="">
+        <span class="brand-copy">
+          <span class="brand-name">FluentText <span class="tag">SETTINGS</span></span>
+          <span class="brand-sub">WRITING ASSISTANT <span class="version" id="versionBadge">v1.0.0</span></span>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <button class="top-btn" id="openSupport" type="button" data-open-support title="Support FluentText">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-6.716-4.35-9.428-8.06C.86 10.44 1.02 7.2 3.34 5.34 5.4 3.69 8.28 4.06 10 6.02L12 8.3l2-2.28c1.72-1.96 4.6-2.33 6.66-.68 2.32 1.86 2.48 5.1.77 7.6C18.716 16.65 12 21 12 21z"/></svg>
+          <span>Support</span>
+        </button>
+        <a class="top-btn solid" id="reportBug" href="mailto:contact@davagni.eu.org?subject=FluentText%20%E2%80%94%20bug%20report" title="Email a bug report, a question or a feature request">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.6 6.4 12 12.6l8.4-6.2"/></svg>
+          <span>Report a bug</span>
+        </a>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <section id="connection">
-      <h2>Connection</h2>
-      <p class="muted small">
-        Groq Writer talks to any service that offers OpenAI-compatible chat completions. Pick Groq for the default,
-        or use another provider, a local model server, a custom endpoint, or a Cloudflare Worker you run yourself.
-        Keys and proxy tokens are stored only in this browser profile and are sent only to the endpoint you choose.
-      </p>
-
-      <div class="field">
-        <label for="provider">Provider</label>
-        <select id="provider"></select>
-        <p class="muted small" id="providerHint"></p>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <div class="side-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.2a2 2 0 0 1-1 1.7l-.4.3a2 2 0 0 1-2 0l-.2-.1a2 2 0 0 0-2.7.7l-.2.4a2 2 0 0 0 .7 2.7l.2.1a2 2 0 0 1 1 1.7v.5a2 2 0 0 1-1 1.7l-.2.1a2 2 0 0 0-.7 2.7l.2.4a2 2 0 0 0 2.7.7l.2-.1a2 2 0 0 1 2 0l.4.3a2 2 0 0 1 1 1.7v.2a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.2a2 2 0 0 1 1-1.7l.4-.3a2 2 0 0 1 2 0l.2.1a2 2 0 0 0 2.7-.7l.2-.4a2 2 0 0 0-.7-2.7l-.2-.1a2 2 0 0 1-1-1.7v-.5a2 2 0 0 1 1-1.7l.2-.1a2 2 0 0 0 .7-2.7l-.2-.4a2 2 0 0 0-2.7-.7l-.2.1a2 2 0 0 1-2 0l-.4-.3a2 2 0 0 1-1-1.7V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </div>
+        <nav class="nav" id="sectionNav" aria-label="Settings sections">
+          <div class="nav-group">Setup</div>
+          <a class="nav-item active" href="#connection" data-section="connection" aria-current="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+            Connection
+          </a>
+          <a class="nav-item" href="#models" data-section="models">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+            Models
+          </a>
+          <div class="nav-group">Writing</div>
+          <a class="nav-item" href="#writing" data-section="writing">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            Writing
+          </a>
+          <a class="nav-item" href="#translation" data-section="translation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18Z"/></svg>
+            Translation
+          </a>
+          <a class="nav-item" href="#shortcuts" data-section="shortcuts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 0 0 0-6Z"/></svg>
+            Quick actions
+          </a>
+          <div class="nav-group">Preferences</div>
+          <a class="nav-item" href="#behavior" data-section="behavior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>
+            Behavior
+          </a>
+          <a class="nav-item" href="#dictionary" data-section="dictionary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+            Dictionary
+          </a>
+          <a class="nav-item" href="#disabled-sites" data-section="disabled-sites">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.7 5.1A10.9 10.9 0 0 1 12 5c7 0 10 7 10 7a17 17 0 0 1-2.1 3.2M6.6 6.6A17 17 0 0 0 2 12s3 7 10 7a10.6 10.6 0 0 0 5.4-1.4"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="m2 2 20 20"/></svg>
+            Disabled sites
+          </a>
+          <div class="nav-group">About</div>
+          <a class="nav-item" href="#privacy" data-section="privacy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            Privacy
+          </a>
+          <button class="nav-item" type="button" data-open-support>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>
+            Support
+          </button>
+        </nav>
+        <div class="side-foot">FluentText <span id="versionFoot">v1.0.0</span> &middot; GPL-3.0</div>
       </div>
+    </aside>
 
-      <div id="customFields" hidden>
-        <div class="field">
-          <label for="customBaseUrl">Endpoint URL</label>
-          <input id="customBaseUrl" type="text" spellcheck="false" autocomplete="off" placeholder="https://api.example.com/v1">
-          <p class="muted small">
-            Base URL of the API. <code>/chat/completions</code> is added automatically when it is missing.
-            Web addresses must match the provider's documented base URL; a local server works too. For a Worker
-            that takes one fixed URL, choose Cloudflare Worker / proxy above instead.
-          </p>
-        </div>
-        <div class="field">
-          <label for="customAuth">Authentication header</label>
-          <select id="customAuth"></select>
-          <p class="muted small" id="authHint">Choose how the key should be sent.</p>
-        </div>
-      </div>
-
-      <div id="proxyFields" hidden>
-        <div class="field">
-          <label for="proxyUrl">Worker URL</label>
-          <input id="proxyUrl" type="text" spellcheck="false" autocomplete="off" placeholder="https://your-worker.your-subdomain.workers.dev/">
-          <p class="muted small">
-            Requests go to this exact address, so a Worker can check it as-is. No API key is stored in the
-            browser: the Worker adds the real key. It must accept <code>POST</code> requests with CORS headers.
-          </p>
-        </div>
-        <div class="field">
-          <label for="proxyToken">Proxy token <span class="muted small">(optional)</span></label>
-          <div class="row">
-            <input id="proxyToken" type="password" autocomplete="off" spellcheck="false" placeholder="Only if your Worker sets PROXY_TOKEN">
-            <button id="showProxyToken" type="button" aria-pressed="false">Show</button>
+    <main class="content">
+      <div class="pane">
+        <section class="card" id="connection">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+            </span>
+            <div>
+              <h2>Connection</h2>
+              <p>Provider, endpoint and credentials.</p>
+            </div>
           </div>
-          <p class="muted small">
-            Sent as <code>Authorization: Bearer</code> and stored only in this browser. Leave it empty if
-            your Worker has no token.
-          </p>
-        </div>
+          <div class="card-body">
+            <p class="lead">
+              FluentText talks to any service that offers OpenAI-compatible chat completions. Pick Groq for the default,
+              or use another provider, a local model server, a custom endpoint, or a Cloudflare Worker you run yourself.
+              Keys and proxy tokens are stored only in this browser profile and are sent only to the endpoint you choose.
+            </p>
+
+            <div class="field">
+              <label for="provider">Provider</label>
+              <select id="provider"></select>
+              <p class="hint" id="providerHint"></p>
+            </div>
+
+            <div id="customFields" hidden>
+              <div class="field">
+                <label for="customBaseUrl">Endpoint URL</label>
+                <input id="customBaseUrl" type="text" spellcheck="false" autocomplete="off" placeholder="https://api.example.com/v1">
+                <p class="hint">
+                  Base URL of the API. <code>/chat/completions</code> is added automatically when it is missing.
+                  Web addresses must match the provider's documented base URL; a local server works too. For a Worker
+                  that takes one fixed URL, choose Cloudflare Worker / proxy above instead.
+                </p>
+              </div>
+              <div class="field">
+                <label for="customAuth">Authentication header</label>
+                <select id="customAuth"></select>
+                <p class="hint" id="authHint">Choose how the key should be sent.</p>
+              </div>
+            </div>
+
+            <div id="proxyFields" hidden>
+              <div class="field">
+                <label for="proxyUrl">Worker URL</label>
+                <input id="proxyUrl" type="text" spellcheck="false" autocomplete="off" placeholder="https://your-worker.your-subdomain.workers.dev/">
+                <p class="hint">
+                  Requests go to this exact address, so a Worker can check it as-is. No API key is stored in the
+                  browser: the Worker adds the real key. It must accept <code>POST</code> requests with CORS headers.
+                </p>
+              </div>
+              <div class="field">
+                <label for="proxyToken">Proxy token <span class="label-note">(optional)</span></label>
+                <div class="row">
+                  <input id="proxyToken" type="password" autocomplete="off" spellcheck="false" placeholder="Only if your Worker sets PROXY_TOKEN">
+                  <button id="showProxyToken" type="button" aria-pressed="false">Show</button>
+                </div>
+                <p class="hint">
+                  Sent as <code>Authorization: Bearer</code> and stored only in this browser. Leave it empty if
+                  your Worker has no token.
+                </p>
+              </div>
+            </div>
+
+            <div class="field" id="keyField">
+              <label for="apiKey" id="apiKeyLabel">API key</label>
+              <div class="row">
+                <input id="apiKey" type="password" autocomplete="off" spellcheck="false">
+                <button id="showKey" type="button" aria-pressed="false">Show</button>
+              </div>
+              <p class="hint" id="keyHint"></p>
+            </div>
+
+            <div class="actions">
+              <button id="saveConnection" class="primary" type="button">Save connection</button>
+              <button id="testConnection" type="button">Test connection</button>
+              <button id="grantAccess" type="button" hidden>Allow access</button>
+              <span id="connStatus" class="status" role="status" aria-live="polite"></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="models">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
+            </span>
+            <div>
+              <h2>Models</h2>
+              <p>Choose what runs while you type and on demand.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="lead">
+              Model names are provider-specific. Use "Load models" after saving to see what your account can use right now.
+              Some servers do not publish a model list; in that case type a name from the provider's documentation.
+            </p>
+            <div class="field-grid">
+              <div class="field">
+                <label for="checkModel">Proofreading model <span class="label-note">(fast)</span></label>
+                <input id="checkModel" type="text" list="modelList" spellcheck="false" autocomplete="off">
+              </div>
+              <div class="field">
+                <label for="rewriteModel">Rewrite model <span class="label-note">(larger)</span></label>
+                <input id="rewriteModel" type="text" list="modelList" spellcheck="false" autocomplete="off">
+              </div>
+            </div>
+            <datalist id="modelList"></datalist>
+            <div class="actions">
+              <button id="loadModels" type="button">Load models</button>
+              <button id="resetModels" type="button">Reset to defaults</button>
+              <span id="modelStatus" class="status" role="status" aria-live="polite"></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="writing">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </span>
+            <div>
+              <h2>Writing</h2>
+              <p>Language variant and what gets checked.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="field">
+              <label for="language">Language</label>
+              <select id="language"></select>
+            </div>
+            <fieldset class="check-set">
+              <legend>What to check</legend>
+              <div id="categories" class="cat-grid"></div>
+            </fieldset>
+          </div>
+        </section>
+
+        <section class="card" id="translation">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18Z"/></svg>
+            </span>
+            <div>
+              <h2>Translation</h2>
+              <p>Pinned languages and the tone used.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="lead">
+              Select text, then use the star or right-click &gt; FluentText &gt; Translate to. The source language is
+              detected automatically. Pinned languages are listed first. Any other language is one step away: the star
+              menu has an "Other language..." box that accepts anything you type, and the right-click menu has a
+              "More languages" list.
+            </p>
+            <div class="field">
+              <label for="targetLanguages">Pinned languages <span class="label-note">(one per line, up to 12)</span></label>
+              <textarea id="targetLanguages" rows="4" spellcheck="false"></textarea>
+            </div>
+            <div class="field">
+              <label for="translateTone">Register</label>
+              <select id="translateTone">
+                <option value="formal">Formal (Sie / vous style)</option>
+                <option value="neutral">Match the original</option>
+              </select>
+            </div>
+            <label class="line">
+              <span>Show the star on any selected text, not just in text boxes</span>
+              <span class="switch"><input id="bubbleEverywhere" type="checkbox"><span class="track"></span></span>
+            </label>
+          </div>
+        </section>
       </div>
 
-      <div class="field" id="keyField">
-        <label for="apiKey" id="apiKeyLabel">API key</label>
-        <div class="row">
-          <input id="apiKey" type="password" autocomplete="off" spellcheck="false">
-          <button id="showKey" type="button" aria-pressed="false">Show</button>
-        </div>
-        <p class="muted small" id="keyHint"></p>
-      </div>
+      <div class="pane">
+        <section class="card" id="shortcuts">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 0 0 0-6Z"/></svg>
+            </span>
+            <div>
+              <h2>Quick actions and shortcuts</h2>
+              <p>What the two quick shortcuts do, and their keys.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="lead">
+              Two shortcuts apply a change straight to the selected text, without opening the menu. Choose what each one
+              does here. The key combinations themselves belong to the browser: use the button below to change them.
+            </p>
+            <div class="field-grid">
+              <div class="field">
+                <label for="quickTone">Quick rewrite applies</label>
+                <select id="quickTone"></select>
+              </div>
+              <div class="field">
+                <label for="quickLanguage">Translate shortcut uses</label>
+                <input id="quickLanguage" type="text" list="languageList" spellcheck="false" autocomplete="off" maxlength="40" placeholder="German">
+                <datalist id="languageList"></datalist>
+              </div>
+            </div>
+            <div id="shortcutList" class="shortcut-list" aria-live="polite"></div>
+            <p class="shortcut-address">
+              Shortcut page: <code id="shortcutUrl">chrome://extensions/shortcuts</code>
+            </p>
+            <div class="actions">
+              <button id="openShortcuts" type="button">Change key combinations</button>
+              <button id="copyShortcuts" type="button">Copy shortcut page address</button>
+              <span id="shortcutStatus" class="status" role="status" aria-live="polite"></span>
+            </div>
+          </div>
+        </section>
 
-      <div class="row actions">
-        <button id="saveConnection" class="primary" type="button">Save connection</button>
-        <button id="testConnection" type="button">Test connection</button>
-        <button id="grantAccess" type="button" hidden>Allow access</button>
-        <span id="connStatus" class="status" role="status" aria-live="polite"></span>
-      </div>
-    </section>
+        <section class="card" id="behavior">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>
+            </span>
+            <div>
+              <h2>Behavior</h2>
+              <p>Badge visibility and how often text is checked.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <label class="line">
+              <span>Show the status badge in text boxes</span>
+              <span class="switch"><input id="showBadge" type="checkbox"><span class="track"></span></span>
+            </label>
+            <div class="field">
+              <label for="debounce">Wait after typing stops: <strong id="debounceValue"></strong></label>
+              <input id="debounce" type="range" min="400" max="3000" step="100">
+              <p class="hint">A longer wait uses fewer requests and stays inside provider rate limits.</p>
+            </div>
+          </div>
+        </section>
 
-    <section>
-      <h2>Models</h2>
-      <p class="muted small">
-        Model names are provider-specific. Use "Load models" after saving to see what your account can use right now.
-        Some servers do not publish a model list; in that case type a name from the provider's documentation.
-      </p>
-      <div class="field">
-        <label for="checkModel">Proofreading model <span class="muted small">(runs as you type, pick a fast one)</span></label>
-        <input id="checkModel" type="text" list="modelList" spellcheck="false" autocomplete="off">
-      </div>
-      <div class="field">
-        <label for="rewriteModel">Rewrite and translate model <span class="muted small">(runs on demand, can be larger)</span></label>
-        <input id="rewriteModel" type="text" list="modelList" spellcheck="false" autocomplete="off">
-      </div>
-      <datalist id="modelList"></datalist>
-      <div class="row actions">
-        <button id="loadModels" type="button">Load models</button>
-        <button id="resetModels" type="button">Reset to provider defaults</button>
-        <span id="modelStatus" class="status" role="status" aria-live="polite"></span>
-      </div>
-    </section>
+        <section class="card" id="dictionary">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+            </span>
+            <div>
+              <h2>Personal dictionary</h2>
+              <p>Words that should never be flagged.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="lead">One per line. Names, brands and technical terms work well here.</p>
+            <textarea id="dictionary" rows="5" spellcheck="false"></textarea>
+          </div>
+        </section>
 
-    <section>
-      <h2>Writing</h2>
-      <div class="field">
-        <label for="language">Language</label>
-        <select id="language"></select>
-      </div>
-      <fieldset>
-        <legend>What to check</legend>
-        <div id="categories"></div>
-      </fieldset>
-    </section>
+        <section class="card" id="disabled-sites">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.7 5.1A10.9 10.9 0 0 1 12 5c7 0 10 7 10 7a17 17 0 0 1-2.1 3.2M6.6 6.6A17 17 0 0 0 2 12s3 7 10 7a10.6 10.6 0 0 0 5.4-1.4"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="m2 2 20 20"/></svg>
+            </span>
+            <div>
+              <h2>Disabled sites</h2>
+              <p>Domains where FluentText stays off.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="lead">One per line, including subdomains, like <code>example.com</code>.</p>
+            <textarea id="disabledSites" rows="4" spellcheck="false"></textarea>
+          </div>
+        </section>
 
-    <section>
-      <h2>Translation</h2>
-      <p class="muted small">
-        Select text, then use the orange star or right-click &gt; Groq Writer &gt; Translate to. The source language is
-        detected automatically. Pinned languages are listed first. Any other language is one step away: the star menu
-        has an "Other language..." box that accepts anything you type, and the right-click menu has a "More languages" list.
-      </p>
-      <div class="field">
-        <label for="targetLanguages">Pinned languages <span class="muted small">(one per line, up to 12)</span></label>
-        <textarea id="targetLanguages" rows="4" spellcheck="false"></textarea>
+        <section class="card" id="privacy">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            </span>
+            <div>
+              <h2>Privacy</h2>
+              <p>Where your text and credentials go.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="lead">
+              Text in a box that FluentText is watching is sent to your chosen provider (Groq by default) or to the
+              Worker or proxy you configure, so it can be checked. Password fields, email fields, code editors, and fields
+              with spellcheck turned off are skipped. Nothing is sent to the developer or anyone else. Your key, proxy URL
+              and token, settings and dictionary stay in this browser; only settings sync through your browser account, and
+              keys and proxy details never do. Turn the extension off on any site from the toolbar popup.
+            </p>
+            <a class="policy-link" href="privacy.html" target="_blank" rel="noopener noreferrer">Read the full privacy policy &#8599;</a>
+          </div>
+        </section>
       </div>
-      <div class="field">
-        <label for="translateTone">Register</label>
-        <select id="translateTone">
-          <option value="formal">Formal (Sie / vous style)</option>
-          <option value="neutral">Match the original</option>
-        </select>
-      </div>
-      <label class="line">
-        <span>Show the star on any selected text, not just in text boxes</span>
-        <span class="switch"><input id="bubbleEverywhere" type="checkbox"><span class="track"></span></span>
-      </label>
-    </section>
-
-    <section id="shortcuts">
-      <h2>Quick actions and shortcuts</h2>
-      <p class="muted small">
-        Two shortcuts apply a change straight to the selected text, without opening the menu. Choose what each one does
-        here. The key combinations themselves belong to the browser: use the button below to change them.
-      </p>
-      <div class="field">
-        <label for="quickTone">Quick rewrite shortcut applies</label>
-        <select id="quickTone"></select>
-      </div>
-      <div class="field">
-        <label for="quickLanguage">Translate shortcut translates into</label>
-        <input id="quickLanguage" type="text" list="languageList" spellcheck="false" autocomplete="off" maxlength="40" placeholder="German">
-        <datalist id="languageList"></datalist>
-      </div>
-      <div id="shortcutList" class="shortcut-list" aria-live="polite"></div>
-      <p class="muted small shortcut-address">
-        Shortcut page: <code id="shortcutUrl">chrome://extensions/shortcuts</code>
-      </p>
-      <div class="row actions">
-        <button id="openShortcuts" type="button">Change key combinations</button>
-        <button id="copyShortcuts" type="button">Copy shortcut page address</button>
-        <span id="shortcutStatus" class="status" role="status" aria-live="polite"></span>
-      </div>
-    </section>
-
-    <section>
-      <h2>Behavior</h2>
-      <label class="line">
-        <span>Show the status badge in text boxes</span>
-        <span class="switch"><input id="showBadge" type="checkbox"><span class="track"></span></span>
-      </label>
-      <div class="field">
-        <label for="debounce">Wait after typing stops: <strong id="debounceValue"></strong></label>
-        <input id="debounce" type="range" min="400" max="3000" step="100">
-        <p class="muted small">A longer wait uses fewer requests and stays inside provider rate limits.</p>
-      </div>
-    </section>
-
-    <section>
-      <h2>Personal dictionary</h2>
-      <p class="muted small">Words listed here are never flagged as misspelled. One per line.</p>
-      <textarea id="dictionary" rows="5" spellcheck="false"></textarea>
-    </section>
-
-    <section>
-      <h2>Disabled sites</h2>
-      <p class="muted small">Groq Writer stays off on these domains (and their subdomains). One per line, like <code>example.com</code>.</p>
-      <textarea id="disabledSites" rows="4" spellcheck="false"></textarea>
-    </section>
-
-    <section>
-      <h2>Privacy</h2>
-      <p class="muted small">
-        Text in a box that Groq Writer is watching is sent to your chosen provider (Groq by default) or to the
-        Worker or proxy you configure, so it can be checked. Password fields, email fields, code editors, and fields
-        with spellcheck turned off are skipped. Nothing is sent to the developer or anyone else. Your key, proxy URL
-        and token, settings and dictionary stay in this browser; only settings sync through your browser account, and
-        keys and proxy details never do. Turn the extension off on any site from the toolbar popup. Full policy:
-        <a href="privacy.html" target="_blank" rel="noopener noreferrer">privacy policy</a>.
-      </p>
-    </section>
+    </main>
+  </div>
 
     <dialog id="supportDialog" class="support-dialog" aria-labelledby="supportTitle">
       <div class="support-head">
         <div>
-          <h2 id="supportTitle">&#10084; Support Groq Writer</h2>
+          <h2 id="supportTitle">&#10084; Support FluentText</h2>
           <p class="muted small">Built and maintained solo, in spare time. If it saves you time, a coffee is always appreciated.</p>
         </div>
         <button id="closeSupport" type="button" aria-label="Close">&#10005;</button>
@@ -236,8 +406,7 @@
       </div>
     </dialog>
 
-    <div id="saved" class="toast" role="status" aria-live="polite">Saved</div>
-  </main>
+  <div id="saved" class="toast" role="status" aria-live="polite">Saved</div>
 
   <script type="module" src="options.js"></script>
 </body>

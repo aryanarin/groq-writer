@@ -461,7 +461,7 @@ async function renderShortcuts() {
     ['tone-shortcut', `Quick rewrite: ${tone}`],
     ['translate-shortcut', `Translate to ${s.quickLanguage}`],
     ['rewrite-selection', 'Open the rewrite menu'],
-    ['toggle-enabled', 'Turn Groq Writer on or off']
+    ['toggle-enabled', 'Turn FluentText on or off']
   ];
 
   box.replaceChildren();
@@ -520,6 +520,41 @@ async function copyShortcutUrl() {
   }
 }
 
+// ---------------------------------------------------------------- navigation
+
+function initSectionNav() {
+  const items = Array.from(document.querySelectorAll('.nav-item[data-section]'));
+  const sections = items
+    .map((item) => document.getElementById(item.dataset.section))
+    .filter(Boolean);
+  if (!sections.length) return;
+
+  const activate = (id) => {
+    for (const item of items) {
+      const active = item.dataset.section === id;
+      item.classList.toggle('active', active);
+      if (active) item.setAttribute('aria-current', 'true');
+      else item.removeAttribute('aria-current');
+    }
+  };
+
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const topbar = document.querySelector('.topbar');
+    const line = (topbar ? topbar.offsetHeight : 0) + 80;
+    const current = sections.find((section) => section.getBoundingClientRect().bottom > line) || sections[sections.length - 1];
+    activate(current.id);
+  };
+  const schedule = () => {
+    if (!frame) frame = requestAnimationFrame(update);
+  };
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  update();
+}
+
 // ---------------------------------------------------------------- init
 
 async function init() {
@@ -534,10 +569,15 @@ async function init() {
   $('proxyToken').value = proxyToken;
 
   // Bug report and support
-  $('reportBug').href = bugReportMailto(api.runtime.getManifest().version, navigator.userAgent);
+  const version = api.runtime.getManifest().version;
+  $('reportBug').href = bugReportMailto(version, navigator.userAgent);
+  $('versionBadge').textContent = 'v' + version;
+  $('versionFoot').textContent = 'v' + version;
   const dialog = $('supportDialog');
   $('upiId').textContent = UPI_ID;
-  $('openSupport').addEventListener('click', () => dialog.showModal());
+  for (const button of document.querySelectorAll('[data-open-support]')) {
+    button.addEventListener('click', () => dialog.showModal());
+  }
   $('closeSupport').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
   $('copyUpi').addEventListener('click', async () => {
@@ -777,6 +817,7 @@ async function init() {
   });
 
   renderShortcuts();
+  initSectionNav();
 }
 
 // Keep the lists in sync if the popup or a context action changes them.

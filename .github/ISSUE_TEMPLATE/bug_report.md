@@ -17,7 +17,7 @@ labels: bug
 Website and the kind of text box (plain textarea, single-line input, or a rich editor such as Gmail or Notion):
 
 **Environment**
-- Groq Writer version:
+- FluentText version:
 - Browser and version:
 - Connection: Groq / another provider / custom endpoint / local server / proxy
 - Provider and model (if not Groq defaults):
